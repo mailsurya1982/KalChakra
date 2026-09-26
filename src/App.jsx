@@ -65,8 +65,16 @@ const quests = [
     lore:"Heritage Lore: Dollu Kunitha from Karnataka - powerful drum dance by Kuruba community, keeping circular formation."
   }
 ]
-
+const cultures = [
+  { id:1, name:"Theyyam", state:"Kerala", info:"800-year-old ritual where man becomes god. Paints face, dances 12 hours.", color:"#FFE9E3" },
+  { id:2, name:"Living Root Bridges", state:"Meghalaya", info:"Khasi tribes grow bridges from rubber roots. Takes 15 years, lasts 500 years.", color:"#E3FFE9" },
+  { id:3, name:"Warli Art", state:"Maharashtra", info:"Tribal art using white rice paste on mud walls with bamboo sticks.", color:"#FFF6E3" },
+  { id:4, name:"Pongal Festival", state:"Tamil Nadu", info:"Harvest festival - boiling rice with milk overflows while shouting Pongal-o-Pongal!", color:"#E3F0FF" },
+  { id:5, name:"Bihu Dance", state:"Assam", info:"Youth dance in paddy fields to welcome Assamese New Year with Dhol drums.", color:"#F3E3FF" },
+  { id:6, name:"Kavad Yatra", state:"Uttar Pradesh", info:"Devotees carry holy water from Ganga for 100s of kms barefoot for Lord Shiva.", color:"#E3FFFB" },
+]
 export default function App(){
+  const [activeTab, setActiveTab] = useState('quests')
   const [filter,setFilter]=useState('All')
   const [done,setDone]=useState([])
   const [xp,setXp]=useState(90)
@@ -86,13 +94,18 @@ export default function App(){
           <span><b>Apprentice</b> Max rank!</span>
         </div>
       </div>
-
-      <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:8}}>
-        {['All','Guess it','Explore More','Do It','Feedback'].map(f=>(
-          <button key={f} onClick={()=>setFilter(f==='All'?'All':f)} style={{whiteSpace:'nowrap',background:filter===f||(filter==='All'&&f==='All')?'#111':'#eee',color:filter===f||(filter==='All'&&f==='All')?'white':'#333',border:0,padding:'8px 14px',borderRadius:20,fontSize:13}}>{f}{f!=='All'?` (${f==='Guess it'?20:f==='Explore More'?30:f==='Do it'?50:10} XP)`:''}</button>
-        ))}
+  <div style={{display:'flex',gap:8,marginBottom:12}}>
+        <button onClick={()=>setActiveTab('quests')} style={{padding:'8px 16px',borderRadius:20,border:'1px solid #111',background:activeTab==='quests'?'#111':'white',color:activeTab==='quests'?'white':'black',fontWeight:'bold'}}>Quests</button>
+        <button onClick={()=>setActiveTab('cultures')} style={{padding:'8px 16px',borderRadius:20,border:'1px solid #111',background:activeTab==='cultures'?'#111':'white',color:activeTab==='cultures'?'white':'black',fontWeight:'bold'}}>Cultures 🌏</button>
       </div>
 
+      {activeTab==='quests' ? (
+      <>
+      <div style={{display:'flex',gap:8,overflowX:'auto',paddingBottom:8}}>
+        {['All','Guess it','Explore More','Do It','Feedback'].map(f=>(
+          <button key={f} onClick={()=>setFilter(f==='All'?'All':f)} style={{whiteSpace:'nowrap',background:filter===f||(filter==='All'&&f==='All')?'#111':'#eee',color:filter===f||(filter==='All'&&f==='All')?'white':'#333',border:0,padding:'6px 12px',borderRadius:20,fontSize:12}}>{f}</button>
+        ))}
+      </div>
       <div style={{display:'grid',gap:12,marginTop:12}}>
         {filtered.map(q=>(
           <div key={q.id} style={{background:'white',borderRadius:16,padding:16,boxShadow:'0 4px 12px rgba(0,0,0,0.06)',borderLeft:`4px solid ${q.type==='Guess it'?'#A78BFA':q.type==='Explore more'?'#60A5FA':q.type==='Do it'?'#F472B6':'#34D399'}`}}>
@@ -108,6 +121,18 @@ export default function App(){
             <div style={{display:'flex',justifyContent:'space-between',marginTop:12,fontSize:12,color:'#666',alignItems:'center'}}>
               <span>🧙 {q.rank}</span>
               <button onClick={()=>toggle(q.id,q.xp)} style={{background:'#111',color:'white',border:0,padding:'8px 14px',borderRadius:8}}>{done.includes(q.id)?'Completed':'Take Quest →'}</button>
+            </>
+        ) : (
+        <div style={{display:'grid',gap:12,marginTop:12}}>
+          {cultures.map(c=>(
+            <div key={c.id} style={{background:c.color,borderRadius:16,padding:16,border:'1px solid #eee'}}>
+              <span style={{background:'white',padding:'2px 8px',borderRadius:10,fontSize:12,fontWeight:'bold'}}>{c.state}</span>
+              <h3 style={{margin:'8px 0 4px'}}>{c.name}</h3>
+              <p style={{color:'#444',fontSize:14,lineHeight:1.4}}>{c.info}</p>
+            </div>
+          ))}
+        </div>
+        )}
             </div>
           </div>
         ))}
